@@ -27,6 +27,7 @@ all_sprites_list.add(snake_sprite)
 #clocks are fun
 fps = pygame.time.Clock()
 
+#start to the game functionality
 game_running = True
 while game_running:
     #good form to put the escape first
