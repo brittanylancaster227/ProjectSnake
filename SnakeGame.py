@@ -19,9 +19,9 @@ pygame.display.set_caption('Snake Game')
 all_sprites_list = pygame.sprite.Group()
 
 #create an instance of our snake class and specify its location
-snake_sprite = Snake(GREEN, 100,10)
-snake_sprite.rect.x = 200
-snake_sprite.rect.y = 300
+snake_sprite = Snake(GREEN, 100,10,window_x,window_y,'right')
+snake_sprite.rect.x = 0
+snake_sprite.rect.y = window_y - snake_sprite.rect.height
 #add instance of snake to our sprite list
 all_sprites_list.add(snake_sprite)
 #clocks are fun
@@ -38,13 +38,13 @@ while game_running:
     #get pressed :)
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
-        snake_sprite.moveLeft(5)
+        snake_sprite.direction = 'left'
     if keys[pygame.K_RIGHT]:
-        snake_sprite.moveRight(5)
+        snake_sprite.direction = 'right'
     if keys[pygame.K_UP]:
-        snake_sprite.moveUp(5)
+        snake_sprite.direction = 'up'
     if keys[pygame.K_DOWN]:
-        snake_sprite.moveDown(5)
+        snake_sprite.direction = 'down'
 
     all_sprites_list.update()
 
