@@ -1,5 +1,4 @@
 import pygame
-from Snake import Snake
 import SnakeSegment as ss
 
 #initializing pygame functions
@@ -17,7 +16,7 @@ window = pygame.display.set_mode(window_size)
 pygame.display.set_caption('Snake Game')
 
 #good to use a group of sprites for flexibility to add more later
-all_sprites_list = pygame.sprite.Group()
+snake = pygame.sprite.Group()
 
 #create snake segments!
 size = 20
@@ -54,16 +53,16 @@ ss5.segment_behind = ss10
 ss10.segment_in_front = ss9
 
 #add all to the list for updating
-all_sprites_list.add(ss1)
-all_sprites_list.add(ss2)
-all_sprites_list.add(ss3)
-all_sprites_list.add(ss4)
-all_sprites_list.add(ss5)
-all_sprites_list.add(ss6)
-all_sprites_list.add(ss7)
-all_sprites_list.add(ss8)
-all_sprites_list.add(ss9)
-all_sprites_list.add(ss10)
+snake.add(ss1)
+snake.add(ss2)
+snake.add(ss3)
+snake.add(ss4)
+snake.add(ss5)
+snake.add(ss6)
+snake.add(ss7)
+snake.add(ss8)
+snake.add(ss9)
+snake.add(ss10)
 
 #clocks are fun
 fps = pygame.time.Clock()
@@ -87,18 +86,18 @@ while game_running:
     if keys[pygame.K_DOWN]:
         ss1.direction = 'down'
 
-    all_sprites_list.update()
+    snake.update()
 
     window.fill(BLACK)
 
-    all_sprites_list.draw(window)
+    snake.draw(window)
     
 
     #SUPER IMPORTANT, FLIP REFRESHES THE SCREEN
     pygame.display.flip()
 
     #fps
-    fps.tick(6)
+    fps.tick(10)
 
 #End Game
 pygame.QUIT()
