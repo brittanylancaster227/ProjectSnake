@@ -20,15 +20,9 @@ pygame.display.set_caption('Snake Game')
 all_sprites_list = pygame.sprite.Group()
 
 #create an instance of our snake class and specify its location
-<<<<<<< Updated upstream
 snake_sprite = Snake(GREEN, 100,10,window_x,window_y,'right')
 snake_sprite.rect.x = 0
 snake_sprite.rect.y = window_y - snake_sprite.rect.height
-=======
-snake_sprite = Snake(GREEN, 100,10)
-snake_sprite.rect.x = window_x
-snake_sprite.rect.y = window_y - snake_sprite.height
->>>>>>> Stashed changes
 #add instance of snake to our sprite list
 all_sprites_list.add(snake_sprite)
 #clocks are fun
