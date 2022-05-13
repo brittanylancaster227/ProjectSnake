@@ -1,5 +1,7 @@
 import pygame
 import SnakeSegment as ss
+from Snake import Snake
+import random 
 
 #initializing pygame functions
 pygame.init()
@@ -60,8 +62,19 @@ def show_game_over_screen():
             if event.type == pygame.KEYUP:
                 waiting = False
 '''
+#snake position
+snake_sprite_position = [100, 50]
+
+# food position
+food_position = [random.randrange(1, (window_x//10)) * 10,
+                  random.randrange(1, (window_y//10)) * 10]
+food_spawn = True
+
+
 
 #start to the game functionality
+
+#game running
 game_running = True
 while game_running:
 
