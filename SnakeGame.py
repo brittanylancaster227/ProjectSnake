@@ -1,14 +1,14 @@
 import pygame
+from pygame.locals import *
 import SnakeSegment as ss
 from Snake import Snake
 import random 
 
 #initializing pygame functions
 pygame.init()
-#colors
-WHITE = (255, 255, 255)
-GREEN = (0, 255, 0)
-BLACK = (0, 0, 0)
+
+BLACK = (0,0,0)
+WHITE = (255,255,255)
 
 #window, must be x and y by pixel
 window_x = 720
@@ -21,7 +21,7 @@ pygame.display.set_caption('Snake Game')
 ss_list = []
 #Group used for updating snake segments in the game loup
 ss_group = pygame.sprite.Group()
-
+    
 ####### Initial Conditions ########
 size = 20
 initial_pos_x = 180
@@ -53,48 +53,13 @@ for ss in ss_list:
 #clocks are fun
 fps = pygame.time.Clock()
 
-def show_go_screen():
-    print('SHOW GO SCREEN HAS FIRED!')
-    gameOverFont = pygame.font.Font('freesansbold.ttf', 100)
-    gameOverFont2 = pygame.font.Font('freesansbold.ttf', 50)
-    gameSurf = gameOverFont.render('Game Over', True, WHITE)
-    overSurf = gameOverFont2.render('Play Again? (y/n)', True, WHITE)
-    #playAgainSurf = gameOverFont.render('Play Again? (y/n)', True, WHITE)
-    gameRect = gameSurf.get_rect()
-    overRect = overSurf.get_rect()
-    #playAgainRect = playAgainSurf.get_rect()
-    gameRect.midtop = (window_x / 2, 10)
-    overRect.midtop = (window_x / 2, gameRect.height + 10 + 25)
-    #playAgainRect.midtop = (window_x / 2, overRect.height + 10 + 25)
-    window.blit(gameSurf, gameRect)
-    window.blit(overSurf, overRect)
-    #window.blit(playAgainSurf, playAgainRect)
-    #drawPressKeyMsg()
-    pygame.display.update()
-    waiting = True
-    while waiting:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                game_running = False
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_y:
-                    waiting = False
-                    main()
-                if event.key == pygame.K_n:
-                    waiting = False
-                    game_running = False
-
-
-
 #snake position
 snake_sprite_position = [100, 50]
 
 # food position
 food_position = [random.randrange(1, (window_x//10)) * 10,
-                  random.randrange(1, (window_y//10)) * 10]
+                random.randrange(1, (window_y//10)) * 10]
 food_spawn = True
-
 
 def main():
     #start to the game functionality
@@ -105,36 +70,61 @@ def main():
 
         game_over = False
         #HANDLE GAME OVER
-        print('*************************************')
-        print('WHILE LOOP # ' + str(count))
+        #print('*************************************')
+        #print('WHILE LOOP # ' + str(count))
         count += 1
         for ss in ss_group:
-            print('------------------------')
+            #print('------------------------')
             for other_ss in ss_group:
-                print('comparing ' + ss.name + ' to ' + other_ss.name + ', ' + str(ss.rect.x) + ' to ' + str(other_ss.rect.x) + ', and ' + str(ss.rect.y) + ' to ' + str(other_ss.rect.y))
+                #print('comparing ' + ss.name + ' to ' + other_ss.name + ', ' + str(ss.rect.x) + ' to ' + str(other_ss.rect.x) + ', and ' + str(ss.rect.y) + ' to ' + str(other_ss.rect.y))
                 if(ss.name is not other_ss.name and ss.rect.x == other_ss.rect.x and ss.rect.y == other_ss.rect.y):
                     game_over = True
                     print('******************SS HAVE CRASHED!!!!!')
 
         if(game_over):
-            show_go_screen()
+            print('SHOW GO SCREEN HAS FIRED!')
+            gameOverFont = pygame.font.Font('freesansbold.ttf', 100)
+            playAgainFont = pygame.font.Font('freesansbold.ttf', 50)
+            gameOverSurf = gameOverFont.render('Game Over', True, WHITE)
+            playAgainSurf = playAgainFont.render('Play Again? (y/n)', True, WHITE)
+            gameOverRect = gameOverSurf.get_rect()
+            playAgainRect = playAgainSurf.get_rect()
+            gameOverRect.midtop = (window_x / 2, 10)
+            playAgainRect.midtop = (window_x / 2, gameOverRect.height + 10 + 25)
+            window.blit(gameOverSurf, gameOverRect)
+            window.blit(playAgainSurf, playAgainRect)
+            pygame.display.update()
+            waiting = True
+            while waiting:
+                for event in pygame.event.get():
+                    if event.type == QUIT:
+                        waiting = False
+                        game_running = False
+                    elif event.type == KEYDOWN:
+                        if event.key == K_n:
+                            print('N WAS PUSHED')
+                            game_running = False
+                            waiting = False
+                        elif event.key == K_y:
+                            print('Y WAS PUSHED')
+                            waiting = False
+                            game_over = False
+                            main()
+            
 
-        #good form to put the escape first
+        #handling any sort of escapes:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == QUIT:
                 game_running = False
-                
-        #get pressed :)
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
-            ss_list[0].direction = 'left'
-        if keys[pygame.K_RIGHT]:
-            ss_list[0].direction = 'right'
-        if keys[pygame.K_UP]:
-            ss_list[0].direction = 'up'
-        if keys[pygame.K_DOWN]:
-            ss_list[0].direction = 'down'
-
+            elif event.type == KEYDOWN:
+                if event.key == K_LEFT:
+                    ss_list[0].direction = 'left'
+                elif event.key == K_RIGHT:
+                    ss_list[0].direction = 'right'
+                elif event.key == K_UP:
+                    ss_list[0].direction = 'up'
+                elif event.key == K_DOWN:
+                    ss_list[0].direction = 'down'
         
         #snake.update()
         for ss in ss_group:
@@ -150,8 +140,8 @@ def main():
 
         #fps
         fps.tick(5)
-
-    #End Game
     pygame.QUIT()
 
 main()
+pygame.QUIT()
+quit()
