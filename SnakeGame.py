@@ -27,7 +27,8 @@ size = 20
 initial_pos_x = 180
 initial_pos_y = window_y - size
 initial_direction = 'right'
-snakelength = 15
+snakelength = 5
+number_of_fruits = 5
 ###################################
 #Create Snake Segments
 k = 1
