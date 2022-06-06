@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-import SnakeSegment as ss
+import SnakeSegment
 import random 
 
 #initializing pygame functions
@@ -14,36 +14,31 @@ LEFT = 'left'
 DOWN = 'down'
 UP = 'up'
 
-#window, must be x and y by pixel
+#Create the window
 window_x = 720
 window_y = 480
 window_size = (window_x, window_y)
 window = pygame.display.set_mode(window_size)
 pygame.display.set_caption('Snake Game')
 
-#List used for initializing snake segments
-ss_list = []
-#Group used for updating snake segments in the game loup
-ss_group = pygame.sprite.Group()
-    
-####### Initial Conditions ########
-size = 20
-initial_pos_x = 180
-initial_pos_y = window_y - size
-initial_direction = 'right'
-snakelength = 5
-number_of_fruits = 5
-initial_direction = RIGHT
-snakelength = 15
-###################################
-#Create Snake Segments
+clock = pygame.time.Clock()
 
-def init_snake():
+def main():
+    
+    #######INITIALIZE GAME ###########
+    count = 1
+    size = 20
+    initial_pos_x = 180
+    initial_pos_y = window_y - size
+    initial_direction = RIGHT
+    snake_length = 15
+    ss_list = []
+    ss_group = pygame.sprite.Group()
+    
     k = 1
-    while k <= snakelength:
+    while k <= snake_length:
         name = 'ss' + str(k)
-        ss_list.append(ss.SnakeSegment(name, BLACK, size, window_x, window_y, initial_pos_x, initial_pos_y, initial_direction))
-        #increment loop variables
+        ss_list.append(SnakeSegment.SnakeSegment(name, BLACK, size, window_x, window_y, initial_pos_x, initial_pos_y, initial_direction))
         initial_pos_x -= size
         k += 1
 
@@ -58,57 +53,11 @@ def init_snake():
             snakeSegment.segment_in_front = ss_list[index-1]
         ss_group.add(snakeSegment)
 
-    snake_sprite_position = [100, 50]
-
-k = 1
-while k <= snakelength:
-    name = 'ss' + str(k)
-    ss_list.append(ss.SnakeSegment(name, BLACK, size, window_x, window_y, initial_pos_x, initial_pos_y, initial_direction))
-    #increment loop variables
-    initial_pos_x -= size
-    k += 1
-
-#Link Snake Segments
-for ss in ss_list:
-    index = ss_list.index(ss)
-    if index == 0:
-        ss.segment_behind = ss_list[index+1]
-    elif index == len(ss_list)-1:
-        ss.segment_in_front = ss_list[index-1]
-    else:
-        ss.segment_behind = ss_list[index+1]
-        ss.segment_in_front = ss_list[index-1]
-    ss_group.add(ss)
-
-#clocks are fun
-fps = pygame.time.Clock()
-
-#snake position
-snake_sprite_position = [100, 50]
-
-def main():
-    #start to the game functionality
-    count = 1
-    #game running
-
-
-
     game_running = True
-    while game_running:
-        init_snake()
-        game_over = False
-        #HANDLE GAME OVER
-        #print('*************************************')
-        #print('WHILE LOOP # ' + str(count))
-        count += 1
-        for ss in ss_group:
-            #print('------------------------')
-            for other_ss in ss_group:
-                #print('comparing ' + ss.name + ' to ' + other_ss.name + ', ' + str(ss.rect.x) + ' to ' + str(other_ss.rect.x) + ', and ' + str(ss.rect.y) + ' to ' + str(other_ss.rect.y))
-                if(ss.name is not other_ss.name and ss.rect.x == other_ss.rect.x and ss.rect.y == other_ss.rect.y):
-                    game_over = True
-                    print('******************SS HAVE CRASHED!!!!!')
+    game_over = False
+    #######END INITIALIZE GAME#########
 
+    while game_running:
         if(game_over):
             print('SHOW GO SCREEN HAS FIRED!')
             gameOverFont = pygame.font.Font('freesansbold.ttf', 100)
@@ -134,44 +83,49 @@ def main():
                             game_running = False
                             waiting = False
                         elif event.key == K_y:
-                            print('Y WAS PUSHED')
-                            waiting = False
-                            game_over = False
                             main()
-            
+        else:
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    game_running = False
+                elif event.type == KEYDOWN:
+                    if event.key == K_LEFT:
+                        if(ss_list[0].direction is not RIGHT):
+                            ss_list[0].direction = LEFT
+                    elif event.key == K_RIGHT:
+                        if(ss_list[0].direction is not LEFT):
+                            ss_list[0].direction = RIGHT
+                    elif event.key == K_UP:
+                        if(ss_list[0].direction is not DOWN):
+                            ss_list[0].direction = UP
+                    elif event.key == K_DOWN:
+                        if(ss_list[0].direction is not UP):
+                            ss_list[0].direction = DOWN
 
-        #handling any sort of escapes:
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                game_running = False
-            elif event.type == KEYDOWN:
-                if event.key == K_LEFT:
-                    if(ss_list[0].direction is not RIGHT):
-                        ss_list[0].direction = LEFT
-                elif event.key == K_RIGHT:
-                    if(ss_list[0].direction is not LEFT):
-                        ss_list[0].direction = RIGHT
-                elif event.key == K_UP:
-                    if(ss_list[0].direction is not DOWN):
-                        ss_list[0].direction = UP
-                elif event.key == K_DOWN:
-                    if(ss_list[0].direction is not UP):
-                        ss_list[0].direction = DOWN
-        
+        window.fill(BLACK)
+        ss_group.draw(window)
+
         #snake.update()
         for ss in ss_group:
             ss.update()
 
-        window.fill(BLACK)
-
-        ss_group.draw(window)
-    
-
         #SUPER IMPORTANT, FLIP REFRESHES THE SCREEN
         pygame.display.flip()
-
+        
+        #HANDLE GAME OVER
+        #print('*************************************')
+        #print('WHILE LOOP # ' + str(count))
+        count += 1
+        for ss in ss_group:
+            #print('------------------------')
+            for other_ss in ss_group:
+                #print('comparing ' + ss.name + ' to ' + other_ss.name + ', ' + str(ss.rect.x) + ' to ' + str(other_ss.rect.x) + ', and ' + str(ss.rect.y) + ' to ' + str(other_ss.rect.y))
+                if(ss.name is not other_ss.name and ss.rect.x == other_ss.rect.x and ss.rect.y == other_ss.rect.y):
+                    game_over = True
+                    print('******************SS HAVE CRASHED!!!!!')
+          
         #fps
-        fps.tick(5)
+        clock.tick(10)
     pygame.QUIT()
 
 main()
