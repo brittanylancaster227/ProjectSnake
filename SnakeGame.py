@@ -58,6 +58,20 @@ def main():
     #######END INITIALIZE GAME#########
 
     while game_running:
+
+        #DETECT A CRASH
+        #print('*************************************')
+        #print('WHILE LOOP # ' + str(count))
+        for ss in ss_group:
+            #print('------------------------')
+            for other_ss in ss_group:
+                #print('comparing ' + ss.name + ' to ' + other_ss.name + ', ' + str(ss.rect.x) + ' to ' + str(other_ss.rect.x) + ', and ' + str(ss.rect.y) + ' to ' + str(other_ss.rect.y))
+                if(ss.name is not other_ss.name and ss.rect.x == other_ss.rect.x and ss.rect.y == other_ss.rect.y):
+                    game_over = True
+                    print('******************SS HAVE CRASHED!!!!!')
+        
+        #Create listener for keystrokes
+
         #Handle game over
         if(game_over):
             print('SHOW GO SCREEN HAS FIRED!')
@@ -85,18 +99,6 @@ def main():
                             game_running = False
                         elif event.key == K_y:
                             main()
-                            
-        
-        #DETECT A CRASH
-        #print('*************************************')
-        #print('WHILE LOOP # ' + str(count))
-        for ss in ss_group:
-            #print('------------------------')
-            for other_ss in ss_group:
-                #print('comparing ' + ss.name + ' to ' + other_ss.name + ', ' + str(ss.rect.x) + ' to ' + str(other_ss.rect.x) + ', and ' + str(ss.rect.y) + ' to ' + str(other_ss.rect.y))
-                if(ss.name is not other_ss.name and ss.rect.x == other_ss.rect.x and ss.rect.y == other_ss.rect.y):
-                    game_over = True
-                    print('******************SS HAVE CRASHED!!!!!')
         
         #Create listener for keystrokes
         else:
