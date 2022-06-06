@@ -29,19 +29,6 @@ class SnakeSegment(pygame.sprite.Sprite):
         self.rect.y = initial_y
         self.prev_x = initial_x
         self.prev_y = initial_y
-    """
-    def moveRight(self, pixels):
-        self.rect.x += pixels
-
-    def moveLeft(self, pixels):
-        self.rect.x -= pixels
-
-    def moveUp(self, pixels):
-        self.rect.y -= pixels
-    
-    def moveDown(self, pixels):
-        self.rect.y += pixels
-    """
 
     def is_at_right_edge(self):
         if(self.rect.x + self.rect.width >= self.window_x):
